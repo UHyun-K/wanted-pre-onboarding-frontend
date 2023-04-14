@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { redirect, useNavigate } from "react-router-dom";
 export default function SignUp() {
     //이메일, 비밀번호 확인
     const [email, setEmail] = useState("");
@@ -9,7 +10,12 @@ export default function SignUp() {
     //유효성검사
     const [isEmail, setIsEmail] = useState(false);
     const [isPassword, setIsPassword] = useState(false);
-
+    //제출확인
+    const [message, setMessage] = useState({
+        registerMessage: "",
+        register: false,
+    });
+    const navigate = useNavigate();
     const onEmailChnage = (event) => {
         const emailRegex = /^[a-zA-Z0-9]+@+[a-z].*$/;
         const {
@@ -40,7 +46,34 @@ export default function SignUp() {
     };
 
     const handleSubmit = (e) => {
-        return null;
+        e.preventDefault();
+
+        fetch("https://www.pre-onboarding-selection-task.shop/auth/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email,
+                password,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("data:", data);
+                if (data.statusCode >= 400) {
+                    setEmailMessage({
+                        registerMessage: data.message,
+                        register: false,
+                    });
+                }
+                setMessage({
+                    registerMessage: "회원가입성공",
+                    register: true,
+                });
+                navigate("/signin");
+            })
+            .catch((error) => console.log(error));
     };
 
     return (
