@@ -39,7 +39,6 @@ export default function SignIn() {
             .then((res) => res.json())
             .then((data) => {
                 //오류시
-                console.log("data:", data);
                 if (data.statusCode >= 400) {
                     setMessage({
                         login: false,
