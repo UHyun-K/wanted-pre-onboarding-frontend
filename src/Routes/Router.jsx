@@ -1,8 +1,8 @@
 import React from "react";
-import SignUp from "../SignUp";
-import SignIn from "../SignIn";
-import ToDos from "../ToDos";
-import NotFound from "../NotFound";
+import SignUp from "../pages/SignUp";
+import SignIn from "../pages/SignIn";
+import ToDos from "../pages/ToDos";
+import NotFound from "../pages/NotFound";
 import { LoggedInRoute, PrivateRoute } from "../libs/useAuth";
 
 import { createBrowserRouter } from "react-router-dom";
