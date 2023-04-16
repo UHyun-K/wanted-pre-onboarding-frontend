@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { redirect, useNavigate } from "react-router-dom";
-
+import {  useNavigate } from "react-router-dom";
+import Form from "../components/Form";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import ErrorMessage from "../components/ErrorMessage"
 //로그인 기능
 export default function SignIn() {
     const [email, setEmail] = useState("");
@@ -42,7 +45,7 @@ export default function SignIn() {
                 if (data.statusCode >= 400) {
                     setMessage({
                         login: false,
-                        loginMessage: data.message,
+                        loginMessage: "로그인에 실패하였습니다.",
                     });
                     return;
                 }
@@ -58,33 +61,25 @@ export default function SignIn() {
     };
 
     return (
-        <>
-            <h1>로그인</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="email">이메일</label>
-                <input
-                    data-testid="email-input"
-                    id="email"
-                    type="email"
-                    onChange={onEmailChnage}
-                    value={email}
-                    required
+        <Form title="로그인"onSubmit={handleSubmit} >
+                <Input
+                     label="이메일"
+                     name="email"
+                     dataTestId="email-input"
+                     onChange={onEmailChnage}
+                     value={email}
+                     requried
                 />
 
-                <label htmlFor="password">비밀번호</label>
-                <input
-                    data-testid="password-input"
-                    id="password"
-                    type="password"
+                <Input
+                    label="비밀번호"
+                    name="password"
+                    dataTestId="password-input"
                     onChange={onPasswordChange}
                     required
                 />
-
-                <button data-testid="signin-button" type="submit">
-                    로그인
-                </button>
-                {!message.login && <span>{message.loginMessage}</span>}
-            </form>
-        </>
+                <Button dataTestId="signin-button" type="submit" text="로그인"/>
+                <ErrorMessage condition={!message.login}message={message.loginMessage}/>
+        </Form>
     );
 }

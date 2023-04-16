@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { redirect, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
+import Form from "../components/Form";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import ErrorMessage from "../components/ErrorMessage"
 export default function SignUp() {
     //이메일, 비밀번호 확인
     const [email, setEmail] = useState("");
@@ -77,35 +81,36 @@ export default function SignUp() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label htmlFor="email">이메일</label>
-            <input
-                data-testid="email-input"
-                id="email"
-                type="email"
-                onChange={onEmailChnage}
-                value={email}
-                required
-            />
-            {email.length > 0 && !isEmail ? <span>{emailMessage} </span> : null}
-            <label htmlFor="password">비밀번호</label>
-            <input
-                data-testid="password-input"
-                id="password"
-                type="password"
-                onChange={onPasswordChange}
-                required
-            />
-            {password.length > 0 && !isPassword ? (
-                <span>{passwordMessage}</span>
-            ) : null}
-            <button
-                data-testid="signup-button"
-                type="submit"
-                disabled={!(isEmail && isPassword)}
-            >
-                다음
-            </button>
-        </form>
+        <Form title="회원가입 " onSubmit={handleSubmit}>
+     
+                <Input
+                    label="이메일"
+                    name="email"
+                    dataTestId="email-input"
+                    onChange={onEmailChnage}
+                    value={email}
+                    requried
+                >
+                    <ErrorMessage condition={email.length > 0 && !isEmail }message={emailMessage}/>
+                </Input>
+                
+                <Input
+                    label="비밀번호"
+                    name="password"
+                    dataTestId="password-input"
+                    onChange={onPasswordChange}
+                    required
+                >
+                   <ErrorMessage condition={password.length > 0 && !isPassword }message={passwordMessage}/>
+                </Input>
+  
+                <Button
+                    dataTestId="signup-button"
+                    type="submit"
+                    disabled={!(isEmail && isPassword)}
+                    text="다음"
+                />
+            </Form>
+    
     );
 }
