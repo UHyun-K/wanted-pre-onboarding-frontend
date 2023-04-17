@@ -1,16 +1,31 @@
 import React, { useRef, useState } from "react";
+import { useAuth } from "../libs/useAuth";
 
 export default function ToDos() {
     const [toDos, setToDos] = useState([]);
     const [toDo, setToDo] = useState("");
     const inputRef = useRef();
-    console.log("toDos:", toDos);
+    const { accessToken } = useAuth();
     const handleValid = (e) => {
         e.preventDefault();
         if (toDo === " ") return;
         setToDos((oldToDos) => [...oldToDos, { text: toDo, id: Date.now() }]);
+        createToDoApi(toDo);
         setToDo("");
     };
+    const createToDoApi = (todo) => {
+        fetch(`https://www.pre-onboarding-selection-task.shop/todos`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+                todo,
+            }),
+        }).then((res) => console.log(res));
+    };
+
     const onChange = (e) => {
         const {
             currentTarget: { value },
