@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../libs/useAuth";
 import Form from "../components/Form";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import ErrorMessage from "../components/ErrorMessage"
+import ErrorMessage from "../components/ErrorMessage";
 //로그인 기능
 export default function SignIn() {
     const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ export default function SignIn() {
         login: false,
     });
     const navigate = useNavigate();
+    const { setAccessToken } = useAuth();
 
     const onEmailChnage = (event) => {
         const {
@@ -50,36 +52,41 @@ export default function SignIn() {
                     return;
                 }
                 //정상
-                localStorage.setItem("loginToken", data.access_token);
-                navigate("/todo");
+                const accessToken = data.access_token;
+                localStorage.setItem("loginToken", accessToken);
+                setAccessToken(accessToken);
                 setMessage({
                     loginMessage: "로그인 성공",
                     login: true,
                 });
+                navigate("/todo");
             })
             .catch((error) => console.log(error));
     };
 
     return (
-        <Form title="로그인"onSubmit={handleSubmit} >
-                <Input
-                     label="이메일"
-                     name="email"
-                     dataTestId="email-input"
-                     onChange={onEmailChnage}
-                     value={email}
-                     requried
-                />
+        <Form title="로그인" onSubmit={handleSubmit}>
+            <Input
+                label="이메일"
+                name="email"
+                dataTestId="email-input"
+                onChange={onEmailChnage}
+                value={email}
+                requried
+            />
 
-                <Input
-                    label="비밀번호"
-                    name="password"
-                    dataTestId="password-input"
-                    onChange={onPasswordChange}
-                    required
-                />
-                <Button dataTestId="signin-button" type="submit" text="로그인"/>
-                <ErrorMessage condition={!message.login}message={message.loginMessage}/>
+            <Input
+                label="비밀번호"
+                name="password"
+                dataTestId="password-input"
+                onChange={onPasswordChange}
+                required
+            />
+            <Button dataTestId="signin-button" type="submit" text="로그인" />
+            <ErrorMessage
+                condition={!message.login}
+                message={message.loginMessage}
+            />
         </Form>
     );
 }
