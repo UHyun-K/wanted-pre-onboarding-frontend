@@ -8,7 +8,7 @@ export default function ToDos() {
     const [isChecked, setIsChecked] = useState(false);
     const inputRef = useRef();
 
-    const checkedItemHandler = (id, isChecked) => {
+    const checkedItemHandler = (id, isChecked, todo) => {
         if (isChecked) {
             setCheckedList((prev) => [...prev, id]);
             return;
@@ -17,16 +17,17 @@ export default function ToDos() {
             setCheckedList(checkedList.filter((item) => item !== id));
             return;
         }
+        updateTodo(id, todo, isChecked);
     };
-    const checkHandler = (event, id) => {
+    const checkHandler = (id, event, todo) => {
         setIsChecked(!isChecked);
-        checkedItemHandler(id, event.target.checked);
+        checkedItemHandler(id, event.target.checked, todo);
     };
 
     const { accessToken } = useAuth();
     useEffect(() => {
         getToDosApi();
-    }, [toDos]);
+    }, []);
     const onChange = (e) => {
         const {
             currentTarget: { value },
@@ -81,15 +82,11 @@ export default function ToDos() {
                 setToDos(data);
             }); */
     };
-    const onSubmit = (e) => {
-        e.preventDefault();
-        console.log(checkedList);
-    };
 
     return (
         <>
             <h3>완료 :{checkedList.length}</h3>
-            <form onSubmit={onSubmit}>
+            <div>
                 <ul>
                     {toDos?.map(({ todo, id }) => (
                         <li key={id}>
@@ -97,7 +94,7 @@ export default function ToDos() {
                                 <input
                                     type="checkbox"
                                     checked={checkedList.includes(id)}
-                                    onChange={(e) => checkHandler(e, id)}
+                                    onChange={(e) => checkHandler(id, e, todo)}
                                 />
                                 <span>{todo}</span>
                             </label>
@@ -119,7 +116,7 @@ export default function ToDos() {
                         </button>
                     </form>
                 </div>
-            </form>
+            </div>
         </>
     );
 }
