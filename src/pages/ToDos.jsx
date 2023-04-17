@@ -7,7 +7,8 @@ export default function ToDos() {
     console.log("toDos:", toDos);
     const handleValid = (e) => {
         e.preventDefault();
-        setToDos((oldToDos) => [{ text: toDo, id: Date.now() }, ...oldToDos]);
+        if (toDo === " ") return;
+        setToDos((oldToDos) => [...oldToDos, { text: toDo, id: Date.now() }]);
         setToDo("");
     };
     const onChange = (e) => {
@@ -18,18 +19,28 @@ export default function ToDos() {
     };
     return (
         <div>
-            <li>
-                <label>
-                    <input type="checkbox" />
-                    <span>TODO 1</span>
-                </label>
-            </li>
-            <li>
-                <label>
-                    <input type="checkbox" />
-                    <span>TODO 2</span>
-                </label>
-            </li>
+            <ul>
+                <li>
+                    <label>
+                        <input type="checkbox" />
+                        <span>TODO 1</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" />
+                        <span>TODO 2</span>
+                    </label>
+                </li>
+                {toDos?.map(({ text, id }) => (
+                    <li key={id}>
+                        <label>
+                            <input type="checkbox" />
+                            <span>{text}</span>
+                        </label>
+                    </li>
+                ))}
+            </ul>
             <div>
                 <form onSubmit={handleValid}>
                     <input
