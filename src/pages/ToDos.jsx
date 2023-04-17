@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../libs/useAuth";
 
 export default function ToDos() {
@@ -6,12 +6,14 @@ export default function ToDos() {
     const [toDo, setToDo] = useState("");
     const inputRef = useRef();
     const { accessToken } = useAuth();
+
     const handleValid = (e) => {
         e.preventDefault();
         if (toDo === " ") return;
-        setToDos((oldToDos) => [...oldToDos, { text: toDo, id: Date.now() }]);
+        /*         setToDos((oldToDos) => [...oldToDos, { text: toDo, id: Date.now() }]); */
         createToDoApi(toDo);
         setToDo("");
+        getToDosApi();
     };
     const createToDoApi = (todo) => {
         fetch(`https://www.pre-onboarding-selection-task.shop/todos`, {
@@ -23,15 +25,30 @@ export default function ToDos() {
             body: JSON.stringify({
                 todo,
             }),
-        }).then((res) => console.log(res));
+        });
     };
-
+    const getToDosApi = () => {
+        fetch(`https://www.pre-onboarding-selection-task.shop/todos`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setToDos(data);
+            });
+    };
+    useEffect(() => {
+        getToDosApi();
+    }, [toDos]);
     const onChange = (e) => {
         const {
             currentTarget: { value },
         } = e;
         setToDo(value);
     };
+
     return (
         <div>
             <ul>
@@ -47,11 +64,11 @@ export default function ToDos() {
                         <span>TODO 2</span>
                     </label>
                 </li>
-                {toDos?.map(({ text, id }) => (
+                {toDos?.map(({ todo, id }) => (
                     <li key={id}>
                         <label>
                             <input type="checkbox" />
-                            <span>{text}</span>
+                            <span>{todo}</span>
                         </label>
                     </li>
                 ))}
