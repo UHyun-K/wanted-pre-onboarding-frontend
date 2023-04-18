@@ -1,5 +1,5 @@
 import React from "react";
-import {Outlet} from "react-router-dom"
+import { Outlet } from "react-router-dom";
 
 export default function Input({
     label,
@@ -7,7 +7,10 @@ export default function Input({
     required = true,
     dataTestId,
     onChange,
-    value,children}) {
+    value,
+    placeholder = null,
+    children,
+}) {
     return (
         <div>
             <label
@@ -24,10 +27,11 @@ export default function Input({
                     type={name}
                     required={required}
                     onChange={onChange}
+                    placeholder={placeholder}
                     className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md  shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
-                 />
+                />
             </div>
-        {children}
+            {children}
         </div>
     );
 }

@@ -14,7 +14,7 @@ export default function ToDos() {
     const { accessToken } = useAuth();
     useEffect(() => {
         getToDosApi();
-    }, []);
+    }, [toDos]);
     const onChange = (e) => {
         const {
             currentTarget: { value },
