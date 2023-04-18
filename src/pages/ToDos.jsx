@@ -4,25 +4,11 @@ import { useAuth } from "../libs/useAuth";
 export default function ToDos() {
     const [toDos, setToDos] = useState([]);
     const [toDo, setToDo] = useState("");
-    /*     const [checkedList, setCheckedList] = useState([]); */
-    /*   const [isChecked, setIsChecked] = useState(false); */
+
     const inputRef = useRef();
 
-    /*     const checkedItemHandler = (id, isChecked, todo) => {
-        if (isChecked) {
-            setCheckedList((prev) => [...prev, id]);
-            return;
-        }
-        if (!isChecked && checkedList.includes(id)) {
-            setCheckedList(checkedList.filter((item) => item !== id));
-            return;
-        }
-        updateTodo(id, todo, isChecked);
-    }; */
     const checkHandler = (id, event, todo) => {
-        /*  setIsChecked(!isChecked); */
-        /*     checkedItemHandler(id, event.target.checked, todo); */
-        updateTodo(id, todo, event.target.checked);
+        updateTodoApi(id, todo, event.target.checked);
     };
 
     const { accessToken } = useAuth();
@@ -66,7 +52,7 @@ export default function ToDos() {
                 setToDos(data);
             });
     };
-    const updateTodo = (id, todo, isCompleted) => {
+    const updateTodoApi = (id, todo, isCompleted) => {
         fetch(`https://www.pre-onboarding-selection-task.shop/todos/${id}`, {
             method: "PUT",
             headers: {
@@ -79,10 +65,27 @@ export default function ToDos() {
             }),
         });
     };
+    const deleteTodoApi = (id) => {
+        fetch(`https://www.pre-onboarding-selection-task.shop/todos/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        }).then((resposne) => {
+            if (resposne.status !== 204) {
+                alert("삭제실패 다시시도해주세요");
+            }
+        });
+
+        setToDos((pre) => {
+            return [...pre].filter((list) => {
+                return list.id !== id;
+            });
+        });
+    };
 
     return (
         <>
-            {/*      <h3>완료 :{checkedList.length}</h3> */}
             <div>
                 <ul>
                     {toDos?.map(({ todo, id, isCompleted }) => (
@@ -97,6 +100,13 @@ export default function ToDos() {
                                 />
                                 <span>{todo}</span>
                             </label>
+                            <button data-testid="modify-button">수정</button>
+                            <button
+                                data-testid="delete-button"
+                                onClick={() => deleteTodoApi(id)}
+                            >
+                                삭제
+                            </button>
                         </li>
                     ))}
                 </ul>
