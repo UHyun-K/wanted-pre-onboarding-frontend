@@ -4,11 +4,11 @@ import { useAuth } from "../libs/useAuth";
 export default function ToDos() {
     const [toDos, setToDos] = useState([]);
     const [toDo, setToDo] = useState("");
-    const [checkedList, setCheckedList] = useState([]);
-    const [isChecked, setIsChecked] = useState(false);
+    /*     const [checkedList, setCheckedList] = useState([]); */
+    /*   const [isChecked, setIsChecked] = useState(false); */
     const inputRef = useRef();
 
-    const checkedItemHandler = (id, isChecked, todo) => {
+    /*     const checkedItemHandler = (id, isChecked, todo) => {
         if (isChecked) {
             setCheckedList((prev) => [...prev, id]);
             return;
@@ -18,10 +18,11 @@ export default function ToDos() {
             return;
         }
         updateTodo(id, todo, isChecked);
-    };
+    }; */
     const checkHandler = (id, event, todo) => {
-        setIsChecked(!isChecked);
-        checkedItemHandler(id, event.target.checked, todo);
+        /*  setIsChecked(!isChecked); */
+        /*     checkedItemHandler(id, event.target.checked, todo); */
+        updateTodo(id, todo, event.target.checked);
     };
 
     const { accessToken } = useAuth();
@@ -77,24 +78,22 @@ export default function ToDos() {
                 isCompleted,
             }),
         });
-        /*   .then((res) => res.json())
-            .then((data) => {
-                setToDos(data);
-            }); */
     };
 
     return (
         <>
-            <h3>완료 :{checkedList.length}</h3>
+            {/*      <h3>완료 :{checkedList.length}</h3> */}
             <div>
                 <ul>
-                    {toDos?.map(({ todo, id }) => (
+                    {toDos?.map(({ todo, id, isCompleted }) => (
                         <li key={id}>
                             <label>
                                 <input
                                     type="checkbox"
-                                    checked={checkedList.includes(id)}
-                                    onChange={(e) => checkHandler(id, e, todo)}
+                                    checked={isCompleted}
+                                    onChange={(event) =>
+                                        checkHandler(id, event, todo)
+                                    }
                                 />
                                 <span>{todo}</span>
                             </label>
