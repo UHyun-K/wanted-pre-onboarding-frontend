@@ -45,7 +45,7 @@ export default function ToDoItem({
             <input
                 type="checkbox"
                 checked={isCompleted}
-                id="checkbox"
+                id={id}
                 onChange={(event) => checkHandler(id, event, todo)}
             />
 
@@ -76,7 +76,7 @@ export default function ToDoItem({
                 </>
             ) : (
                 <>
-                    <label>
+                    <label htmlFor={id}>
                         <span>{todo}</span>
                     </label>
 
