@@ -2,34 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../libs/useAuth";
 import ToDoItem from "../components/toDo/ToDoItem";
 import { createToDoApi } from "../api/todoApi";
+import ToDoEnter from "../components/toDo/ToDoEnter";
 
 export default function ToDos() {
     const [toDos, setToDos] = useState([]);
-    const [toDo, setToDo] = useState("");
-
-    const inputRef = useRef();
-
     const { accessToken } = useAuth();
     useEffect(() => {
         getToDosApi();
     }, []);
-    const onChange = (e) => {
-        const {
-            currentTarget: { value },
-        } = e;
-        setToDo(value);
-    };
 
-    const handleValid = (e) => {
-        e.preventDefault();
-        if (toDo === " ") return;
-        createToDoApi(toDo, accessToken);
-        setToDo("");
-        getToDosApi();
-    };
-
-    const getToDosApi = () => {
-        fetch(`https://www.pre-onboarding-selection-task.shop/todos`, {
+    const getToDosApi = async () => {
+        await fetch(`https://www.pre-onboarding-selection-task.shop/todos`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -42,35 +25,22 @@ export default function ToDos() {
     };
 
     return (
-        <>
+        <div className="mt-16 px-4 ">
+            <h1 className="text-3xl font-bold text-center">To Do List</h1>
+            <ul className="flex flex-col mt-12 space-y-4">
+                {toDos?.map(({ todo, id, isCompleted }) => (
+                    <ToDoItem
+                        todo={todo}
+                        id={id}
+                        isCompleted={isCompleted}
+                        accessToken={accessToken}
+                        setToDos={setToDos}
+                    />
+                ))}
+            </ul>
             <div>
-                <ul>
-                    {toDos?.map(({ todo, id, isCompleted }) => (
-                        <ToDoItem
-                            todo={todo}
-                            id={id}
-                            isCompleted={isCompleted}
-                            accessToken={accessToken}
-                            setToDos={setToDos}
-                        />
-                    ))}
-                </ul>
-                <div>
-                    <form onSubmit={handleValid}>
-                        <input
-                            type="text"
-                            data-testid="new-todo-input"
-                            placeholder="내용을 입력해주세요"
-                            value={toDo}
-                            ref={inputRef}
-                            onChange={onChange}
-                        />
-                        <button type="submit" data-testid="new-todo-add-button">
-                            추가
-                        </button>
-                    </form>
-                </div>
+                <ToDoEnter accessToken={accessToken} />
             </div>
-        </>
+        </div>
     );
 }
