@@ -1,7 +1,7 @@
 import { createToDoApi, getToDosApi } from "../../api/todoApi";
 import React, { useRef, useState } from "react";
-import Button from "../Button";
-export default function ToDoEnter({ accessToken }) {
+
+export default function ToDoEnter({ accessToken, setToDos, getToDosApi }) {
     const [toDo, setToDo] = useState("");
     const inputRef = useRef();
 
@@ -10,8 +10,9 @@ export default function ToDoEnter({ accessToken }) {
         if (toDo === " ") return;
         createToDoApi(toDo, accessToken);
         setToDo("");
-        getToDosApi(accessToken);
+        getToDosApi();
     };
+
     const onChange = (e) => {
         const {
             currentTarget: { value },

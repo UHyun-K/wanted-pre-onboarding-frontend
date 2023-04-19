@@ -1,3 +1,12 @@
+export const getToDosApi = (accessToken) => {
+    return fetch(`https://www.pre-onboarding-selection-task.shop/todos`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+};
+
 export const createToDoApi = (todo, accessToken) => {
     fetch(`https://www.pre-onboarding-selection-task.shop/todos`, {
         method: "POST",
@@ -31,17 +40,4 @@ export const deleteTodoApi = (id, accessToken) => {
             Authorization: `Bearer ${accessToken}`,
         },
     });
-};
-
-export const getToDosApi = (accessToken) => {
-    fetch(`https://www.pre-onboarding-selection-task.shop/todos`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
-        .then((res) => res.json())
-        .then((data) => {
-            return data;
-        });
 };
