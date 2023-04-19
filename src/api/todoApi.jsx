@@ -32,3 +32,16 @@ export const deleteTodoApi = (id, accessToken) => {
         },
     });
 };
+
+export const getToDosApi = (accessToken) => {
+    fetch(`https://www.pre-onboarding-selection-task.shop/todos`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            return data;
+        });
+};
