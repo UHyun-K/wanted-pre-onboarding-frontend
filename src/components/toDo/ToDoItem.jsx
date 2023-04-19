@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef } from "react";
 import { updateTodoApi, deleteTodoApi } from "../../api/todoApi";
 export default function ToDoItem({
     todo,
@@ -9,6 +9,7 @@ export default function ToDoItem({
 }) {
     const [isEdit, setIsEdit] = useState(false);
     const [newToDo, setNewToDo] = useState(todo);
+    const inputRef = useRef();
     const toggleEditing = () => {
         setIsEdit((prev) => !prev);
     };
@@ -41,7 +42,7 @@ export default function ToDoItem({
     };
 
     return (
-        <li key={id}>
+        <li key={id} className="flex relative">
             <input
                 type="checkbox"
                 checked={isCompleted}
@@ -55,40 +56,57 @@ export default function ToDoItem({
                         onSubmit={(e) =>
                             handleEditValid(e, id, newToDo, isCompleted)
                         }
+                        className="flex"
                     >
                         <input
                             type="text"
                             data-testid="modify-input"
                             value={newToDo}
                             onChange={onEditChange}
+                            ref={inputRef}
+                            className="mx-2 border-3 ring-2 ring-orange-200"
                         />
-                        <button type="submit" data-testid="submit-button">
-                            확인
-                        </button>
-                        <button
-                            type="button"
-                            data-testid="cancel-button"
-                            onClick={toggleEditing}
-                        >
-                            취소
-                        </button>
+                        <div className="absolute right-0 space-x-2">
+                            <button
+                                type="submit"
+                                data-testid="submit-button"
+                                className="bg-orange-200 px-2 rounded"
+                            >
+                                확인
+                            </button>
+                            <button
+                                type="button"
+                                data-testid="cancel-button"
+                                onClick={toggleEditing}
+                                className="bg-orange-200 px-2 rounded"
+                            >
+                                취소
+                            </button>
+                        </div>
                     </form>
                 </>
             ) : (
                 <>
                     <label htmlFor={id}>
-                        <span>{todo}</span>
+                        <span className="mx-2">{todo}</span>
                     </label>
 
-                    <button data-testid="modify-button" onClick={toggleEditing}>
-                        수정
-                    </button>
-                    <button
-                        data-testid="delete-button"
-                        onClick={() => onDelete()}
-                    >
-                        삭제
-                    </button>
+                    <div className="absolute right-0 space-x-2">
+                        <button
+                            data-testid="modify-button"
+                            onClick={toggleEditing}
+                            className="bg-orange-200 px-2 rounded"
+                        >
+                            수정
+                        </button>
+                        <button
+                            data-testid="delete-button"
+                            onClick={() => onDelete()}
+                            className="bg-orange-200 px-2 rounded"
+                        >
+                            삭제
+                        </button>
+                    </div>
                 </>
             )}
         </li>

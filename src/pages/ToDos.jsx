@@ -33,6 +33,13 @@ export default function ToDos() {
                 "Loading..."
             ) : (
                 <div>
+                    <div className="my-10">
+                        <ToDoEnter
+                            accessToken={accessToken}
+                            setToDos={setToDos}
+                            getToDosApi={getToDosApi}
+                        />
+                    </div>
                     <ul className="flex flex-col mt-12 space-y-4">
                         {toDos &&
                             toDos.map(({ todo, id, isCompleted }) => (
@@ -45,13 +52,6 @@ export default function ToDos() {
                                 />
                             ))}
                     </ul>
-                    <div>
-                        <ToDoEnter
-                            accessToken={accessToken}
-                            setToDos={setToDos}
-                            getToDosApi={getToDosApi}
-                        />
-                    </div>
                 </div>
             )}
         </div>

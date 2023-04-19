@@ -29,7 +29,11 @@ export default function ToDoEnter({ accessToken, setToDos, getToDosApi }) {
                 ref={inputRef}
                 onChange={onChange}
             />
-            <button type="submit" data-testid="new-todo-add-button">
+            <button
+                type="submit"
+                data-testid="new-todo-add-button"
+                className="bg-orange-200 px-2 rounded"
+            >
                 추가
             </button>
         </form>
